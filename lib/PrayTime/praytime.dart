@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:adhan/adhan.dart';
 import 'package:intl/intl.dart';
@@ -15,11 +17,12 @@ class _PraytimeState extends State<Praytime> {
   late Future<PrayerTimes> _prayerTimesFuture;
   late String _timeZone;
   late String _locationName;
+  late var _locationPermission;
 
   @override
   void initState() {
     super.initState();
-    _prayerTimesFuture = _fetchPrayerTimes(); // Inisialisasi di sini
+    _prayerTimesFuture = _fetchPrayerTimes();
   }
 
   Future<PrayerTimes> _fetchPrayerTimes() async {
@@ -55,6 +58,7 @@ class _PraytimeState extends State<Praytime> {
 
       return prayerTimes;
     } catch (e) {
+      print(e);
       throw e;
     }
   }
@@ -79,7 +83,7 @@ class _PraytimeState extends State<Praytime> {
           children: [
             Center(
               child: Text(
-                  'Jadwal Salat Hari Ini waktu UTC$_timeZone Wilayah $_locationName',
+                  'Jadwal Salat Hari Ini waktu $_timeZone Wilayah $_locationName',
                   style: Theme.of(context).textTheme.bodyLarge),
             ),
             const SizedBox(height: 16.0),

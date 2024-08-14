@@ -3,6 +3,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'Compass/compass.dart';
 import 'Donation/donation.dart';
 import 'PrayTime/praytime.dart';
+import 'ErrorWidgets/LocationError.dart';
+// import 'package:flutter_qiblah/flutter_qiblah.dart';
+// import 'package:geolocator/geolocator.dart';
 
 void main() {
   runApp(const KiblatKuApp());
@@ -65,6 +68,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  // Future<void> _checkLocationStatus() async {
+  //   final locationStatus = await FlutterQiblah.checkLocationStatus();
+  //   if (locationStatus.enabled &&
+  //       locationStatus.status == LocationPermission.denied) {
+  //     await FlutterQiblah.requestPermissions();
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,10 +91,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   Praytime(),
                   Donation(),
                 ]
-              : const <Widget>[
-                  Text('Akses Lokasi diperlukan untuk menggunakan aplikasi'),
-                  Text('Akses Lokasi diperlukan untuk menggunakan aplikasi'),
-                  Donation()
+              : <Widget>[
+                  LocationErrorWidget(
+                    error: "Mohon nyalakan izin akses lokasi",
+                    callback: _checkAndRequestPermission,
+                  ),
+                  LocationErrorWidget(
+                    error: "Mohon nyalakan izin akses lokasi",
+                    callback: _checkAndRequestPermission,
+                  ),
+                  const Donation()
                 ]),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Theme.of(context).canvasColor,

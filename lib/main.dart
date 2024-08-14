@@ -4,8 +4,6 @@ import 'Compass/compass.dart';
 import 'Donation/donation.dart';
 import 'PrayTime/praytime.dart';
 import 'ErrorWidgets/LocationError.dart';
-// import 'package:flutter_qiblah/flutter_qiblah.dart';
-// import 'package:geolocator/geolocator.dart';
 
 void main() {
   runApp(const KiblatKuApp());
@@ -67,14 +65,6 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     }
   }
-
-  // Future<void> _checkLocationStatus() async {
-  //   final locationStatus = await FlutterQiblah.checkLocationStatus();
-  //   if (locationStatus.enabled &&
-  //       locationStatus.status == LocationPermission.denied) {
-  //     await FlutterQiblah.requestPermissions();
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

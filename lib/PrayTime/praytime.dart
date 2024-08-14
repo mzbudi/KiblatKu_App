@@ -17,7 +17,6 @@ class _PraytimeState extends State<Praytime> {
   late Future<PrayerTimes> _prayerTimesFuture;
   late String _timeZone;
   late String _locationName;
-  late var _locationPermission;
 
   @override
   void initState() {
@@ -58,7 +57,6 @@ class _PraytimeState extends State<Praytime> {
 
       return prayerTimes;
     } catch (e) {
-      print(e);
       throw e;
     }
   }

@@ -84,6 +84,12 @@ class _PraytimeState extends State<Praytime> {
                   'Jadwal Salat Hari Ini waktu $_timeZone Wilayah $_locationName',
                   style: Theme.of(context).textTheme.bodyLarge),
             ),
+            Center(
+              child: Text(
+                '*Perhitungan waktu solat diambil dari Muslim World League - Mecca',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
             const SizedBox(height: 16.0),
             _buildPrayerTimeItem('Fajr', prayerTimes.fajr),
             _buildPrayerTimeItem('Sunrise', prayerTimes.sunrise),
@@ -98,12 +104,15 @@ class _PraytimeState extends State<Praytime> {
   }
 
   Widget _buildPrayerTimeItem(String label, DateTime time) {
-    return ListTile(
-      title: Text(
-        label,
-        style: Theme.of(context).textTheme.bodyLarge,
-      ),
-      trailing: Text(DateFormat.jm().format(time)),
-    );
+    return Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        child: ListTile(
+          title: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          trailing: Text(DateFormat.jm().format(time)),
+        ));
   }
 }

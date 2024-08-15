@@ -79,15 +79,21 @@ class _PraytimeState extends State<Praytime> {
         return ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
-            Center(
-              child: Text(
-                  'Jadwal Salat Hari Ini waktu $_timeZone Wilayah $_locationName',
-                  style: Theme.of(context).textTheme.bodyLarge),
+            Container(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Center(
+                child: Text(
+                    'Jadwal Salat Hari Ini waktu $_timeZone Wilayah $_locationName',
+                    style: Theme.of(context).textTheme.bodyLarge),
+              ),
             ),
-            Center(
-              child: Text(
-                '*Perhitungan waktu solat diambil dari Muslim World League - Mecca',
-                style: Theme.of(context).textTheme.bodySmall,
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              child: Center(
+                child: Text(
+                  '*Perhitungan waktu solat diambil dari Muslim World League - Mecca',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
               ),
             ),
             const SizedBox(height: 16.0),

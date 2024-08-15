@@ -80,7 +80,7 @@ class _PraytimeState extends State<Praytime> {
           padding: const EdgeInsets.all(16.0),
           children: [
             Container(
-              padding: const EdgeInsets.only(bottom: 8),
+              margin: const EdgeInsets.only(bottom: 8),
               child: Center(
                 child: Text(
                     'Jadwal Salat Hari Ini waktu $_timeZone Wilayah $_locationName',

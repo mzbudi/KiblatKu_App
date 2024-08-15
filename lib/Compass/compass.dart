@@ -6,6 +6,7 @@ import 'package:flutter_qiblah/flutter_qiblah.dart';
 import 'package:free_qibla_finder/ErrorWidgets/LocationError.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'gps_accuracy.dart';
 
 class Compass extends StatefulWidget {
   const Compass({super.key});
@@ -111,24 +112,26 @@ class QiblahCompassWidget extends StatelessWidget {
 
         final qiblahDirection = snapshot.data!;
 
-        return Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Transform.rotate(
-              angle: (qiblahDirection.direction * (pi / 180) * -1),
-              child: _compassSvg,
+        return Stack(alignment: Alignment.center, children: <Widget>[
+          Transform.rotate(
+            angle: (qiblahDirection.direction * (pi / 180) * -1),
+            child: _compassSvg,
+          ),
+          Transform.rotate(
+            angle: (qiblahDirection.qiblah * (pi / 180) * -1),
+            alignment: Alignment.center,
+            child: _needleSvg,
+          ),
+          Positioned(
+            bottom: 8,
+            child: Column(
+              children: [
+                Text("${qiblahDirection.offset.toStringAsFixed(3)}°"),
+                const GpsAccuracyWidget()
+              ],
             ),
-            Transform.rotate(
-              angle: (qiblahDirection.qiblah * (pi / 180) * -1),
-              alignment: Alignment.center,
-              child: _needleSvg,
-            ),
-            Positioned(
-              bottom: 8,
-              child: Text("${qiblahDirection.offset.toStringAsFixed(3)}°"),
-            )
-          ],
-        );
+          )
+        ]);
       },
     );
   }

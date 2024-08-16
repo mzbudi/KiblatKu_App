@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:adhan/adhan.dart';
 import 'package:intl/intl.dart';
@@ -26,25 +25,18 @@ class _PraytimeState extends State<Praytime> {
 
   Future<PrayerTimes> _fetchPrayerTimes() async {
     try {
-      // Ambil lokasi pengguna
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
 
-      // Tentukan koordinat berdasarkan lokasi pengguna
       final myCoordinates = Coordinates(position.latitude, position.longitude);
 
-      // Dapatkan parameter perhitungan
-      final params = CalculationMethod.muslim_world_league
-          .getParameters(); // Gunakan metode MWL atau lainnya sesuai kebutuhan
+      final params = CalculationMethod.muslim_world_league.getParameters();
       params.madhab = Madhab.shafi;
 
-      // Ambil waktu salat hari ini
       final prayerTimes = PrayerTimes.today(myCoordinates, params);
 
-      // Ambil zona waktu
       final localTimeZone = DateTime.now().timeZoneName;
 
-      // Dapatkan nama kota dan negara
       final placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
       final placemark = placemarks.first;
@@ -76,34 +68,44 @@ class _PraytimeState extends State<Praytime> {
 
         final prayerTimes = snapshot.data!;
 
-        return ListView(
+        return Container(
           padding: const EdgeInsets.all(16.0),
-          children: [
-            Container(
-              margin: const EdgeInsets.only(bottom: 8),
-              child: Center(
-                child: Text(
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: Center(
+                  child: Text(
                     'Jadwal Salat Hari Ini waktu $_timeZone Wilayah $_locationName',
-                    style: Theme.of(context).textTheme.bodyLarge),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(bottom: 8),
-              child: Center(
-                child: Text(
-                  '*Perhitungan waktu solat diambil dari Muslim World League - Mecca',
-                  style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            _buildPrayerTimeItem('Fajr', prayerTimes.fajr),
-            _buildPrayerTimeItem('Sunrise', prayerTimes.sunrise),
-            _buildPrayerTimeItem('Dhuhr', prayerTimes.dhuhr),
-            _buildPrayerTimeItem('Asr', prayerTimes.asr),
-            _buildPrayerTimeItem('Maghrib', prayerTimes.maghrib),
-            _buildPrayerTimeItem('Isha', prayerTimes.isha),
-          ],
+              const SizedBox(height: 16.0),
+              Expanded(
+                child: ListView(
+                  children: [
+                    _buildPrayerTimeItem('Fajr', prayerTimes.fajr),
+                    _buildPrayerTimeItem('Sunrise', prayerTimes.sunrise),
+                    _buildPrayerTimeItem('Dhuhr', prayerTimes.dhuhr),
+                    _buildPrayerTimeItem('Asr', prayerTimes.asr),
+                    _buildPrayerTimeItem('Maghrib', prayerTimes.maghrib),
+                    _buildPrayerTimeItem('Isha', prayerTimes.isha),
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: Center(
+                  child: Text(
+                    '*Perhitungan waktu salat diambil dari Muslim World League - Mecca',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -111,14 +113,15 @@ class _PraytimeState extends State<Praytime> {
 
   Widget _buildPrayerTimeItem(String label, DateTime time) {
     return Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: ListTile(
-          title: Text(
-            label,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          trailing: Text(DateFormat.jm().format(time)),
-        ));
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: ListTile(
+        title: Text(
+          label,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        trailing: Text(DateFormat.jm().format(time)),
+      ),
+    );
   }
 }

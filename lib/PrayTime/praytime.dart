@@ -4,6 +4,7 @@ import 'package:adhan/adhan.dart';
 import 'package:intl/intl.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 
 class Praytime extends StatefulWidget {
   const Praytime({super.key});
@@ -77,21 +78,57 @@ class _PraytimeState extends State<Praytime> {
                 child: Center(
                   child: Text(
                     'Jadwal Salat Hari Ini waktu $_timeZone Wilayah $_locationName',
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins'),
                     textAlign: TextAlign.center,
                   ),
                 ),
               ),
               const SizedBox(height: 16.0),
               Expanded(
-                child: ListView(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  childAspectRatio: 1.5,
                   children: [
-                    _buildPrayerTimeItem('Fajr', prayerTimes.fajr),
-                    _buildPrayerTimeItem('Sunrise', prayerTimes.sunrise),
-                    _buildPrayerTimeItem('Dhuhr', prayerTimes.dhuhr),
-                    _buildPrayerTimeItem('Asr', prayerTimes.asr),
-                    _buildPrayerTimeItem('Maghrib', prayerTimes.maghrib),
-                    _buildPrayerTimeItem('Isha', prayerTimes.isha),
+                    _buildPrayerTimeItem(
+                        'Fajr',
+                        prayerTimes.fajr,
+                        const Icon(
+                          FlutterIslamicIcons.solidLantern,
+                          color: Color.fromARGB(255, 249, 210, 119),
+                        )),
+                    _buildPrayerTimeItem(
+                        'Sunrise',
+                        prayerTimes.sunrise,
+                        const Icon(
+                          Icons.wb_sunny,
+                          color: Color.fromARGB(255, 252, 236, 93),
+                        )),
+                    _buildPrayerTimeItem(
+                        'Dhuhr',
+                        prayerTimes.dhuhr,
+                        const Icon(
+                          Icons.sunny,
+                          color: Color.fromARGB(255, 251, 201, 2),
+                        )),
+                    _buildPrayerTimeItem('Asr', prayerTimes.asr,
+                        const Icon(Icons.sunny_snowing, color: Colors.orange)),
+                    _buildPrayerTimeItem(
+                        'Maghrib',
+                        prayerTimes.maghrib,
+                        const Icon(
+                          Icons.brightness_6,
+                          color: Color.fromARGB(255, 224, 137, 5),
+                        )),
+                    _buildPrayerTimeItem(
+                        'Isha',
+                        prayerTimes.isha,
+                        const Icon(Icons.mode_night,
+                            color: Color.fromARGB(255, 243, 236, 181))),
                   ],
                 ),
               ),
@@ -111,17 +148,36 @@ class _PraytimeState extends State<Praytime> {
     );
   }
 
-  Widget _buildPrayerTimeItem(String label, DateTime time) {
+  Widget _buildPrayerTimeItem(String label, DateTime time, Icon icon) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: ListTile(
-        title: Text(
-          label,
-          style: Theme.of(context).textTheme.bodyLarge,
+      child: Stack(children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(8),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 20,
+              ),
+            ),
+            Text(
+              DateFormat.jm().format(time),
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ]),
         ),
-        trailing: Text(DateFormat.jm().format(time)),
-      ),
+        Positioned(
+          bottom: 8,
+          right: 8,
+          child: Icon(icon.icon, size: 40, color: icon.color),
+        ),
+      ]),
     );
   }
 }

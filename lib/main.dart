@@ -20,9 +20,13 @@ class KiblatKuApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-      ),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+          useMaterial3: true,
+          textTheme: const TextTheme(
+            bodyLarge: TextStyle(fontFamily: 'Poppins'),
+            bodyMedium: TextStyle(fontFamily: 'Poppins'),
+            bodySmall: TextStyle(fontFamily: 'Poppins'),
+          )),
       home: UpgradeAlert(
         showIgnore: false,
         showLater: false,

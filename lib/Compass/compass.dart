@@ -131,7 +131,10 @@ class QiblahCompassWidget extends StatelessWidget {
             bottom: 8,
             child: Column(
               children: [
-                Text("${qiblahDirection.offset.toStringAsFixed(3)}°"),
+                Text(
+                  "${qiblahDirection.offset.toStringAsFixed(3)}°",
+                  // style: const TextStyle(fontFamily: 'Poppins'),
+                ),
                 const GpsAccuracyWidget()
               ],
             ),

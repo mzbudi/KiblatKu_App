@@ -39,7 +39,13 @@ class _UserLocationState extends State<UserLocation> {
           return Center(
             child: Text(
               positionSnapshot.data!,
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(
+                fontSize: 16,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+              softWrap: true,
             ),
           );
         }

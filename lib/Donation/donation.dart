@@ -15,6 +15,10 @@ class Donation extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        const Text(
+          'UNDER CONSTRUCTION',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
         const Text("Traktir kopi untuk developer 😍"),
         const Text(
             "Kami menjaga agar layanan ini berguna untuk umat dan tetap bebas iklan"),

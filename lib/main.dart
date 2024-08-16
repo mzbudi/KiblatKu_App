@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
+import 'package:upgrader/upgrader.dart';
 
 import 'Compass/compass.dart';
 import 'Donation/donation.dart';
@@ -22,7 +23,11 @@ class KiblatKuApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'KiblatKu'),
+      home: UpgradeAlert(
+        showIgnore: false,
+        showLater: false,
+        child: const MyHomePage(title: 'KiblatKu'),
+      ),
     );
   }
 }

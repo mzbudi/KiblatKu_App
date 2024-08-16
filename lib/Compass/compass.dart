@@ -7,6 +7,7 @@ import 'package:free_qibla_finder/ErrorWidgets/LocationError.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'gps_accuracy.dart';
+import 'user_location.dart';
 
 class Compass extends StatefulWidget {
   const Compass({super.key});
@@ -113,6 +114,10 @@ class QiblahCompassWidget extends StatelessWidget {
         final qiblahDirection = snapshot.data!;
 
         return Stack(alignment: Alignment.center, children: <Widget>[
+          const Positioned(
+            top: 8,
+            child: UserLocation(),
+          ),
           Transform.rotate(
             angle: (qiblahDirection.direction * (pi / 180) * -1),
             child: _compassSvg,

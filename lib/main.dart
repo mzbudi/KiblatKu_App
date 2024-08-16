@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
+
 import 'Compass/compass.dart';
 import 'Donation/donation.dart';
 import 'PrayTime/praytime.dart';
@@ -96,15 +98,15 @@ class _MyHomePageState extends State<MyHomePage> {
         selectedItemColor: Theme.of(context).canvasColor,
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.compass_calibration),
+              icon: Icon(FlutterIslamicIcons.solidKaaba),
               label: 'Kiblat',
               key: Key('Qibla')),
           BottomNavigationBarItem(
-              icon: Icon(Icons.campaign_rounded),
+              icon: Icon(FlutterIslamicIcons.solidPrayingPerson),
               label: 'Sholat',
               key: Key('Praytime')),
           BottomNavigationBarItem(
-              icon: Icon(Icons.handshake),
+              icon: Icon(FlutterIslamicIcons.solidZakat),
               label: 'Donasi',
               key: Key('Donation'))
         ],

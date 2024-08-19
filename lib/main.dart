@@ -2,13 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'Compass/compass.dart';
 import 'Donation/donation.dart';
 import 'PrayTime/praytime.dart';
 import 'ErrorWidgets/LocationError.dart';
 
-void main() {
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
   runApp(const KiblatKuApp());
 }
 
@@ -53,12 +66,21 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _checkAndRequestPermission();
+    // _requestNotificationPermission();
   }
 
   void _tabChanged(idx) {
     setState(() {
       _tabIndex = idx;
     });
+  }
+
+  Future<void> _requestNotificationPermission() async {
+    // Periksa apakah izin notifikasi telah diberikan
+    if (await Permission.notification.isDenied) {
+      // Minta izin jika belum diberikan
+      await Permission.notification.request();
+    }
   }
 
   Future<void> _checkAndRequestPermission() async {
@@ -75,6 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
         _locationPermissionGranted = true;
       });
     }
+
+    await _requestNotificationPermission();
   }
 
   @override
@@ -103,25 +127,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   const Donation()
                 ]),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Theme.of(context).canvasColor,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(FlutterIslamicIcons.solidKaaba),
-              label: 'Kiblat',
-              key: Key('Qibla')),
-          BottomNavigationBarItem(
-              icon: Icon(FlutterIslamicIcons.solidPrayingPerson),
-              label: 'Sholat',
-              key: Key('Praytime')),
-          BottomNavigationBarItem(
-              icon: Icon(FlutterIslamicIcons.solidZakat),
-              label: 'Donasi',
-              key: Key('Donation'))
-        ],
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        onTap: (tabIndex) => {_tabChanged(tabIndex)},
-        currentIndex: _tabIndex,
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.only(top: 8, bottom: 8),
+        color: Theme.of(context).colorScheme.inversePrimary,
+        child: BottomNavigationBar(
+          selectedItemColor: Theme.of(context).canvasColor,
+          items: const [
+            BottomNavigationBarItem(
+                icon: Icon(FlutterIslamicIcons.solidKaaba),
+                label: 'Kiblat',
+                key: Key('Qibla')),
+            BottomNavigationBarItem(
+                icon: Icon(FlutterIslamicIcons.solidPrayingPerson),
+                label: 'Sholat',
+                key: Key('Praytime')),
+            BottomNavigationBarItem(
+                icon: Icon(FlutterIslamicIcons.solidZakat),
+                label: 'Donasi',
+                key: Key('Donation'))
+          ],
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          onTap: (tabIndex) => {_tabChanged(tabIndex)},
+          currentIndex: _tabIndex,
+          elevation: 0,
+        ),
       ),
     );
   }

@@ -3,6 +3,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:workmanager/workmanager.dart';
+import 'PrayTime/praytime_service.dart';
 
 import 'Compass/compass.dart';
 import 'Donation/donation.dart';
@@ -11,6 +13,20 @@ import 'ErrorWidgets/LocationError.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
+
+@pragma(
+    'vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    try {
+      var praytimeFetcher = PraytimeService(flutterLocalNotificationsPlugin);
+      praytimeFetcher.fetchPrayerTimes();
+    } catch (e) {
+      throw Exception(e);
+    }
+    return Future.value(true);
+  });
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +37,8 @@ void main() async {
       InitializationSettings(android: initializationSettingsAndroid);
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
 
   runApp(const KiblatKuApp());
 }

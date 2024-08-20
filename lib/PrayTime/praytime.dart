@@ -6,10 +6,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
+// import 'package:timezone/timezone.dart' as tz;
+// import 'package:timezone/data/latest.dart' as tz;
 import 'package:workmanager/workmanager.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
+
+import 'praytime_service.dart';
 
 class Praytime extends StatefulWidget {
   const Praytime({super.key});
@@ -20,164 +22,190 @@ class Praytime extends StatefulWidget {
 
 class _PraytimeState extends State<Praytime> {
   late Future<PrayerTimes> _prayerTimesFuture;
-  late String _timeZone;
-  late String _locationName;
+  // late Future _praytimeLocationAndTimezone;
+  // late String _timeZone;
+  // late String _locationName;
+  // late Future<PrayerTimes> _prayerTimesFuture;
+  late PraytimeService _praytimeService;
+  late String? _timeZone;
+  late String? _locationName;
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  @pragma(
-      'vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
-  void callbackDispatcher() {
-    Workmanager().executeTask((task, inputData) async {
-      try {
-        _fetchPrayerTimes();
-      } catch (e) {
-        throw Exception(e);
-      }
-      return Future.value(true);
-    });
-  }
+  // @pragma(
+  //     'vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
+  // void callbackDispatcher() {
+  //   Workmanager().executeTask((task, inputData) async {
+  //     try {
+  //       _fetchPrayerTimes();
+  //     } catch (e) {
+  //       throw Exception(e);
+  //     }
+  //     return Future.value(true);
+  //   });
+  // }
 
   @override
   void initState() {
     super.initState();
-    tz.initializeTimeZones();
-    _prayerTimesFuture = _fetchPrayerTimes();
-    Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+    // tz.initializeTimeZones();
+    // _prayerTimesFuture = _fetchPrayerTimes();
+    // Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
     Workmanager().registerPeriodicTask('praytime-scheduler', 'pray-schedule',
         frequency: const Duration(hours: 24),
         initialDelay: const Duration(seconds: 10));
 
     // Panggil fungsi pengujian
-    _requestNotificationPermission();
+    // _requestNotificationPermission();
     // _testNotification();
+    _praytimeService = PraytimeService(flutterLocalNotificationsPlugin);
+    _prayerTimesFuture = _praytimeService.fetchPrayerTimes();
+    _fetchLocationAndTimeZone();
+    // _timeZone = _praytimeService.timeZone;
+    // _locationName = _praytimeService.locationName;
   }
 
-  Future<void> _requestNotificationPermission() async {
-    // Periksa apakah izin notifikasi telah diberikan
-    if (await Permission.notification.isDenied) {
-      // Minta izin jika belum diberikan
-      await Permission.notification.request();
-    }
+  Future<void> _fetchLocationAndTimeZone() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    final localTimeZone = DateTime.now().timeZoneName;
+
+    final placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    final placemark = placemarks.first;
+    final locationName = '${placemark.locality}, ${placemark.country}';
+
+    setState(() {
+      _timeZone = localTimeZone;
+      _locationName = locationName;
+    });
   }
 
-  Future<void> _scheduleNotifications(PrayerTimes prayerTimes) async {
-    final notifications = [
-      {'label': 'Fajr', 'time': prayerTimes.fajr},
-      {'label': 'Sunrise', 'time': prayerTimes.sunrise},
-      {'label': 'Dhuhr', 'time': prayerTimes.dhuhr},
-      {'label': 'Asr', 'time': prayerTimes.asr},
-      {'label': 'Maghrib', 'time': prayerTimes.maghrib},
-      {'label': 'Isha', 'time': prayerTimes.isha},
-    ];
-
-    for (var i = 0; i < notifications.length; i++) {
-      final notification = notifications[i];
-      await _scheduleNotification(
-          notification['label'] as String, notification['time'] as DateTime, i);
-    }
-  }
-
-  // Future<void> _testNotification() async {
-  //   try {
-  //     print("Oke");
-  //     const androidDetails = AndroidNotificationDetails(
-  //       'test_channel',
-  //       'Test Notifications',
-  //       channelDescription: 'This channel is used for testing notifications.',
-  //       importance: Importance.max,
-  //       priority: Priority.high,
-  //     );
-
-  //     const platformDetails = NotificationDetails(android: androidDetails);
-
-  //     // Mengatur waktu notifikasi dalam beberapa detik dari sekarang
-  //     final scheduledTime = tz.TZDateTime.now(tz.getLocation('Asia/Jakarta'))
-  //         .add(const Duration(seconds: 5));
-
-  //     await flutterLocalNotificationsPlugin.zonedSchedule(
-  //       999, // ID untuk notifikasi ini, bisa angka unik
-  //       'Test Notifikasi',
-  //       'Ini adalah notifikasi tes untuk memastikan fungsionalitas.',
-  //       scheduledTime,
-  //       platformDetails,
-  //       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-  //       uiLocalNotificationDateInterpretation:
-  //           UILocalNotificationDateInterpretation.absoluteTime,
-  //       matchDateTimeComponents: DateTimeComponents.dateAndTime,
-  //     );
-  //   } catch (e) {
-  //     print(Exception(e));
+  // Future<void> _requestNotificationPermission() async {
+  //   // Periksa apakah izin notifikasi telah diberikan
+  //   if (await Permission.notification.isDenied) {
+  //     // Minta izin jika belum diberikan
+  //     await Permission.notification.request();
   //   }
   // }
 
-  Future<void> _scheduleNotification(
-      String label, DateTime time, int id) async {
-    const androidDetails = AndroidNotificationDetails(
-      'prayer_times_channel',
-      'Prayer Times',
-      channelDescription: 'This channel is used for prayer time notifications.',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
+  // Future<void> _scheduleNotifications(PrayerTimes prayerTimes) async {
+  //   final notifications = [
+  //     {'label': 'Fajr', 'time': prayerTimes.fajr},
+  //     {'label': 'Sunrise', 'time': prayerTimes.sunrise},
+  //     {'label': 'Dhuhr', 'time': prayerTimes.dhuhr},
+  //     {'label': 'Asr', 'time': prayerTimes.asr},
+  //     {'label': 'Maghrib', 'time': prayerTimes.maghrib},
+  //     {'label': 'Isha', 'time': prayerTimes.isha},
+  //   ];
 
-    // Convert DateTime to TZDateTime
-    final tzTime = tz.TZDateTime.from(time, tz.local);
-    print(tzTime);
-    print('tzTime');
+  //   for (var i = 0; i < notifications.length; i++) {
+  //     final notification = notifications[i];
+  //     await _scheduleNotification(
+  //         notification['label'] as String, notification['time'] as DateTime, i);
+  //   }
+  // }
 
-    final newTz = tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
-    print(newTz);
-    print('newtz');
+  // // Future<void> _testNotification() async {
+  // //   try {
+  // //     print("Oke");
+  // //     const androidDetails = AndroidNotificationDetails(
+  // //       'test_channel',
+  // //       'Test Notifications',
+  // //       channelDescription: 'This channel is used for testing notifications.',
+  // //       importance: Importance.max,
+  // //       priority: Priority.high,
+  // //     );
 
-    const platformDetails = NotificationDetails(android: androidDetails);
+  // //     const platformDetails = NotificationDetails(android: androidDetails);
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      'Waktu $label telah tiba',
-      'Sekarang adalah waktu untuk $label.',
-      tzTime, // Adjust to local time if needed
-      platformDetails,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time,
-    );
-  }
+  // //     // Mengatur waktu notifikasi dalam beberapa detik dari sekarang
+  // //     final scheduledTime = tz.TZDateTime.now(tz.getLocation('Asia/Jakarta'))
+  // //         .add(const Duration(seconds: 5));
 
-  Future<PrayerTimes> _fetchPrayerTimes() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+  // //     await flutterLocalNotificationsPlugin.zonedSchedule(
+  // //       999, // ID untuk notifikasi ini, bisa angka unik
+  // //       'Test Notifikasi',
+  // //       'Ini adalah notifikasi tes untuk memastikan fungsionalitas.',
+  // //       scheduledTime,
+  // //       platformDetails,
+  // //       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+  // //       uiLocalNotificationDateInterpretation:
+  // //           UILocalNotificationDateInterpretation.absoluteTime,
+  // //       matchDateTimeComponents: DateTimeComponents.dateAndTime,
+  // //     );
+  // //   } catch (e) {
+  // //     print(Exception(e));
+  // //   }
+  // // }
 
-      final myCoordinates = Coordinates(position.latitude, position.longitude);
+  // Future<void> _scheduleNotification(
+  //     String label, DateTime time, int id) async {
+  //   const androidDetails = AndroidNotificationDetails(
+  //     'prayer_times_channel',
+  //     'Prayer Times',
+  //     channelDescription: 'This channel is used for prayer time notifications.',
+  //     importance: Importance.max,
+  //     priority: Priority.high,
+  //   );
 
-      final params = CalculationMethod.muslim_world_league.getParameters();
-      params.madhab = Madhab.shafi;
+  //   // Convert DateTime to TZDateTime
+  //   final tzTime = tz.TZDateTime.from(time, tz.local);
+  //   print(tzTime);
+  //   print('tzTime');
 
-      final prayerTimes = PrayerTimes.today(myCoordinates, params);
+  //   final newTz = tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
+  //   print(newTz);
+  //   print('newtz');
 
-      final localTimeZone = DateTime.now().timeZoneName;
+  //   const platformDetails = NotificationDetails(android: androidDetails);
 
-      final placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
-      final placemark = placemarks.first;
-      final locationName = '${placemark.locality}, ${placemark.country}';
+  //   await flutterLocalNotificationsPlugin.zonedSchedule(
+  //     id,
+  //     'Waktu $label telah tiba',
+  //     'Sekarang adalah waktu untuk $label.',
+  //     tzTime, // Adjust to local time if needed
+  //     platformDetails,
+  //     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+  //     uiLocalNotificationDateInterpretation:
+  //         UILocalNotificationDateInterpretation.absoluteTime,
+  //     matchDateTimeComponents: DateTimeComponents.time,
+  //   );
+  // }
 
-      setState(() {
-        _timeZone = localTimeZone;
-        _locationName = locationName;
-      });
+  // Future<PrayerTimes> _fetchPrayerTimes() async {
+  //   try {
+  //     Position position = await Geolocator.getCurrentPosition(
+  //         desiredAccuracy: LocationAccuracy.high);
 
-      // Schedule notifications after fetching prayer times
-      await _scheduleNotifications(prayerTimes);
+  //     final myCoordinates = Coordinates(position.latitude, position.longitude);
 
-      return prayerTimes;
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
+  //     final params = CalculationMethod.muslim_world_league.getParameters();
+  //     params.madhab = Madhab.shafi;
+
+  //     final prayerTimes = PrayerTimes.today(myCoordinates, params);
+
+  //     final localTimeZone = DateTime.now().timeZoneName;
+
+  //     final placemarks =
+  //         await placemarkFromCoordinates(position.latitude, position.longitude);
+  //     final placemark = placemarks.first;
+  //     final locationName = '${placemark.locality}, ${placemark.country}';
+
+  //     setState(() {
+  //       _timeZone = localTimeZone;
+  //       _locationName = locationName;
+  //     });
+
+  //     // Schedule notifications after fetching prayer times
+  //     await _scheduleNotifications(prayerTimes);
+
+  //     return prayerTimes;
+  //   } catch (e) {
+  //     throw Exception(e);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -193,6 +221,8 @@ class _PraytimeState extends State<Praytime> {
         }
 
         final prayerTimes = snapshot.data!;
+        final displayTimeZone = _timeZone ?? 'Loading...';
+        final displayLocationName = _locationName ?? 'Loading...';
 
         return Container(
           padding: const EdgeInsets.all(16.0),
@@ -202,7 +232,7 @@ class _PraytimeState extends State<Praytime> {
                 margin: const EdgeInsets.only(bottom: 8),
                 child: Center(
                   child: Text(
-                    'Jadwal Salat Hari Ini waktu $_timeZone Wilayah $_locationName',
+                    'Jadwal Salat Hari Ini waktu $displayTimeZone Wilayah $displayLocationName',
                     style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

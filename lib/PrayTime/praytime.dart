@@ -227,18 +227,55 @@ class _PraytimeState extends State<Praytime> {
         return Container(
           padding: const EdgeInsets.all(16.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 margin: const EdgeInsets.only(bottom: 8),
-                child: Center(
+                child: const Center(
                   child: Text(
-                    'Jadwal Salat Hari Ini waktu $displayTimeZone Wilayah $displayLocationName',
-                    style: const TextStyle(
+                    'Jadwal Salat Hari Ini',
+                    style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Poppins'),
                     textAlign: TextAlign.center,
                   ),
+                ),
+              ),
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Zona Waktu : $displayTimeZone',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins'),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Lokasi : $displayLocationName',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ]),
                 ),
               ),
               const SizedBox(height: 16.0),
@@ -250,27 +287,27 @@ class _PraytimeState extends State<Praytime> {
                   childAspectRatio: 1.5,
                   children: [
                     _buildPrayerTimeItem(
-                        'Fajr',
+                        'Subuh',
                         prayerTimes.fajr,
                         const Icon(
                           FlutterIslamicIcons.solidLantern,
                           color: Color.fromARGB(255, 249, 210, 119),
                         )),
                     _buildPrayerTimeItem(
-                        'Sunrise',
+                        'Terbit',
                         prayerTimes.sunrise,
                         const Icon(
                           Icons.wb_sunny,
                           color: Color.fromARGB(255, 252, 236, 93),
                         )),
                     _buildPrayerTimeItem(
-                        'Dhuhr',
+                        'Dzuhur',
                         prayerTimes.dhuhr,
                         const Icon(
                           Icons.sunny,
                           color: Color.fromARGB(255, 251, 201, 2),
                         )),
-                    _buildPrayerTimeItem('Asr', prayerTimes.asr,
+                    _buildPrayerTimeItem('Ashar', prayerTimes.asr,
                         const Icon(Icons.sunny_snowing, color: Colors.orange)),
                     _buildPrayerTimeItem(
                         'Maghrib',

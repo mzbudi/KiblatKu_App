@@ -36,16 +36,20 @@ class _UserLocationState extends State<UserLocation> {
         } else if (positionSnapshot.hasError || !positionSnapshot.hasData) {
           return const Text('Lokasi Tidak Diketahui');
         } else {
-          return Center(
-            child: Text(
-              positionSnapshot.data!,
-              style: const TextStyle(
-                fontSize: 16,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.bold,
+          return SizedBox(
+            height: 100,
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: Center(
+              child: Text(
+                positionSnapshot.data!,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+                softWrap: true, // Membuat teks membungkus jika terlalu panjang
               ),
-              textAlign: TextAlign.center,
-              softWrap: true,
             ),
           );
         }

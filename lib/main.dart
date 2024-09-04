@@ -14,15 +14,34 @@ import 'ErrorWidgets/LocationError.dart';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
+// @pragma(
+//     'vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
+// void callbackDispatcher() {
+//   Workmanager().executeTask((task, inputData) async {
+//     try {
+//       var praytimeFetcher = PraytimeService(flutterLocalNotificationsPlugin);
+//       praytimeFetcher.fetchPrayerTimes();
+//     } catch (e) {
+//       throw Exception(e);
+//     }
+//     return Future.value(true);
+//   });
+// }
+
 @pragma(
     'vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    try {
-      var praytimeFetcher = PraytimeService(flutterLocalNotificationsPlugin);
-      praytimeFetcher.fetchPrayerTimes();
-    } catch (e) {
-      throw Exception(e);
+    final now = DateTime.now();
+    final hour = now.hour;
+
+    if (hour == 0 || (hour == 1)) {
+      try {
+        var praytimeFetcher = PraytimeService(flutterLocalNotificationsPlugin);
+        await praytimeFetcher.fetchPrayerTimes();
+      } catch (e) {
+        print('Error: $e');
+      }
     }
     return Future.value(true);
   });

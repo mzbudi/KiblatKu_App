@@ -51,7 +51,7 @@ class _PraytimeState extends State<Praytime> {
 
   void _initializeWorkmanager() {
     Workmanager().registerPeriodicTask('praytime-scheduler', 'pray-schedule',
-        frequency: const Duration(hours: 24),
+        frequency: const Duration(hours: 1),
         initialDelay: const Duration(seconds: 10));
   }
 

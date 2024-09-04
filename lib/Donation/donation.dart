@@ -10,25 +10,97 @@ class Donation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const Text(
-          'UNDER CONSTRUCTION',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        const Text("Traktir kopi untuk developer 😍"),
-        const Text(
-            "Kami menjaga agar layanan ini berguna untuk umat dan tetap bebas iklan"),
-        const Text("Bisa juga support kami dengan nonton iklan dibawah! 👍"),
-        ElevatedButton(
-          onPressed: _addBtn,
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-          child: const Text("Tonton Iklan 🎬"),
-        )
-      ],
-    ));
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Text(
+            "Kami menjaga agar layanan ini bermanfaat untuk umat dan tetap bebas iklan",
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(
+            height: 60,
+          ),
+          Text(
+            "Traktir Developer 😍",
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Container(
+              margin: const EdgeInsets.only(bottom: 28),
+              height: 200,
+              child: GridView.count(
+                crossAxisCount: 2,
+                childAspectRatio: 2,
+                children: [
+                  _buildDonationCard('Traktir', '☕'),
+                  _buildDonationCard('Traktir', '🍚'),
+                  _buildDonationCard('Traktir', '🍔'),
+                  _buildDonationCard('Traktir', '🍨'),
+                ],
+              )),
+          const SizedBox(
+            height: 24,
+          ),
+          const Text(
+            "Bisa juga support kami dengan nonton iklan dibawah! 👍",
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+                fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+          ElevatedButton(
+            onPressed: _addBtn,
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber, elevation: 8),
+            child: const Text(
+              "Tonton Iklan 🎬",
+              style:
+                  TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDonationCard(String label, String icon) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              elevation: 4),
+          onPressed: () {},
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(
+              label,
+              style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16),
+            ),
+            Text(
+              icon,
+              style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24),
+            ),
+          ])),
+    );
   }
 }

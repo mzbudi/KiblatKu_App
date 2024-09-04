@@ -83,7 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _checkAndRequestPermission();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _checkAndRequestPermission();
+    });
     // _requestNotificationPermission();
   }
 
@@ -98,6 +100,10 @@ class _MyHomePageState extends State<MyHomePage> {
     if (await Permission.notification.isDenied) {
       // Minta izin jika belum diberikan
       await Permission.notification.request();
+    }
+
+    if (await Permission.scheduleExactAlarm.isDenied) {
+      await Permission.scheduleExactAlarm.request();
     }
   }
 

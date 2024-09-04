@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import '../Services/ads_service.dart';
 
 class Donation extends StatelessWidget {
   const Donation({super.key});
 
-  _addBtn() {
-    // TBD
-    print('asdl');
+  _rewardedAdBtn() {
+    AdService().showRewardedAd();
   }
 
   @override
@@ -62,7 +62,7 @@ class Donation extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           ElevatedButton(
-            onPressed: _addBtn,
+            onPressed: _rewardedAdBtn,
             style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.amber, elevation: 8),
             child: const Text(

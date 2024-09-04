@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:upgrader/upgrader.dart';
@@ -10,23 +11,10 @@ import 'Compass/compass.dart';
 import 'Donation/donation.dart';
 import 'PrayTime/praytime.dart';
 import 'ErrorWidgets/LocationError.dart';
+import 'Services/ads_service.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
-
-// @pragma(
-//     'vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
-// void callbackDispatcher() {
-//   Workmanager().executeTask((task, inputData) async {
-//     try {
-//       var praytimeFetcher = PraytimeService(flutterLocalNotificationsPlugin);
-//       praytimeFetcher.fetchPrayerTimes();
-//     } catch (e) {
-//       throw Exception(e);
-//     }
-//     return Future.value(true);
-//   });
-// }
 
 @pragma(
     'vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
@@ -49,6 +37,10 @@ void callbackDispatcher() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  /**
+   * Workmanager Initialization
+   */
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -58,6 +50,20 @@ void main() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+
+  /**
+   * End of Workmanager Section
+   */
+
+  /**
+  * MobileAds Initialization
+  */
+
+  AdService().initialize();
+
+  /**
+   * End of MobileAds Section
+   */
 
   runApp(const KiblatKuApp());
 }

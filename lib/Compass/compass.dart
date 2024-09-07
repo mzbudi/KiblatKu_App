@@ -3,11 +3,12 @@ import 'dart:math' show pi;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_qiblah/flutter_qiblah.dart';
-import 'package:free_qibla_finder/ErrorWidgets/LocationError.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'gps_accuracy.dart';
 import 'user_location.dart';
+
+import '../ErrorWidgets/LocationError.dart';
 
 class Compass extends StatefulWidget {
   const Compass({super.key});

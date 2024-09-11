@@ -19,7 +19,7 @@ class PraytimeService {
 
       final myCoordinates = Coordinates(position.latitude, position.longitude);
 
-      final params = CalculationMethod.muslim_world_league.getParameters();
+      final params = CalculationMethod.singapore.getParameters();
       params.madhab = Madhab.shafi;
 
       final prayerTimes = PrayerTimes.today(myCoordinates, params);

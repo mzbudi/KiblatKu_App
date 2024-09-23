@@ -190,15 +190,19 @@ class _PraytimeState extends State<Praytime> {
               ),
               Container(
                 margin: const EdgeInsets.only(bottom: 8),
-                child: Center(
-                  child: Text(
-                    '*Perhitungan waktu salat diambil dari Muslim World League - Mecca',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  // child: ElevatedButton(
-                  //   onPressed: _testNotification,
-                  //   child: Text('Test Notifikasi'),
-                  // ),
+                child: const Column(
+                  children: [
+                    Text(
+                      '*Penentapan Waktu Shubuh	: 20.0°. Kemiringan Matahari',
+                      style: TextStyle(fontFamily: 'Poppins'),
+                      textAlign: TextAlign.left,
+                    ),
+                    Text(
+                      '*Penetapan Waktu Isya	: 18.0°. Kemiringan Matahari',
+                      style: TextStyle(fontFamily: 'Poppins'),
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
                 ),
               ),
             ],

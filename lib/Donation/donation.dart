@@ -1,10 +1,54 @@
 import 'package:flutter/material.dart';
 import '../Services/ads_service.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
-class Donation extends StatelessWidget {
+class Donation extends StatefulWidget {
   const Donation({super.key});
 
-  _rewardedAdBtn() {
+  @override
+  State<Donation> createState() => _DonationState();
+}
+
+class _DonationState extends State<Donation> {
+  // final InAppPurchase _iap = InAppPurchase.instance;
+  // bool _available = true;
+  // List<ProductDetails> _products = [];
+  // final Set<String> _productIds = {
+  //   'traktir_kopi',
+  //   'traktir_nasi',
+  //   'traktir_burger',
+  //   'traktir_eskrim'
+  // };
+
+  @override
+  void initState() {
+    super.initState();
+    // _initializeIAP();
+  }
+
+  // Inisialisasi IAP dan ambil produk dari Google Play
+  // void _initializeIAP() async {
+  //   _available = await _iap.isAvailable();
+  //   if (_available) {
+  //     ProductDetailsResponse response =
+  //         await _iap.queryProductDetails(_productIds);
+  //     if (response.notFoundIDs.isEmpty) {
+  //       setState(() {
+  //         _products = response.productDetails;
+  //       });
+  //     }
+  //   }
+  // }
+
+  // Fungsi untuk memulai pembelian
+  // void _buyProduct(ProductDetails product) {
+  //   final PurchaseParam purchaseParam = PurchaseParam(productDetails: product);
+  //   _iap.buyNonConsumable(
+  //       purchaseParam:
+  //           purchaseParam); // Menggunakan non-konsumabel untuk donasi satu kali
+  // }
+
+  void _rewardedAdBtn() {
     AdService().showRewardedAd();
   }
 

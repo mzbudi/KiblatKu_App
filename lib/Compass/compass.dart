@@ -51,43 +51,45 @@ class _CompassState extends State<Compass> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(8.0),
-      child: StreamBuilder(
-        stream: stream,
-        builder: (context, AsyncSnapshot<LocationStatus> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator(
-              color: Colors.blue,
-            );
-          }
-          if (snapshot.data!.enabled == true) {
-            switch (snapshot.data!.status) {
-              case LocationPermission.always:
-              case LocationPermission.whileInUse:
-                return QiblahCompassWidget();
-
-              case LocationPermission.denied:
-                return LocationErrorWidget(
-                  error: "Location service permission denied",
-                  callback: _checkLocationStatus,
-                );
-              case LocationPermission.deniedForever:
-                return LocationErrorWidget(
-                  error: "Location service Denied Forever !",
-                  callback: _checkLocationStatus,
-                );
-              default:
-                return const SizedBox();
+    return Scaffold(
+      body: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(8.0),
+        child: StreamBuilder(
+          stream: stream,
+          builder: (context, AsyncSnapshot<LocationStatus> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator(
+                color: Colors.blue,
+              );
             }
-          } else {
-            return LocationErrorWidget(
-              error: "Please enable Location service",
-              callback: _checkLocationStatus,
-            );
-          }
-        },
+            if (snapshot.data!.enabled == true) {
+              switch (snapshot.data!.status) {
+                case LocationPermission.always:
+                case LocationPermission.whileInUse:
+                  return QiblahCompassWidget();
+
+                case LocationPermission.denied:
+                  return LocationErrorWidget(
+                    error: "Location service permission denied",
+                    callback: _checkLocationStatus,
+                  );
+                case LocationPermission.deniedForever:
+                  return LocationErrorWidget(
+                    error: "Location service Denied Forever !",
+                    callback: _checkLocationStatus,
+                  );
+                default:
+                  return const SizedBox();
+              }
+            } else {
+              return LocationErrorWidget(
+                error: "Please enable Location service",
+                callback: _checkLocationStatus,
+              );
+            }
+          },
+        ),
       ),
     );
   }

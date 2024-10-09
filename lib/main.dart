@@ -12,6 +12,7 @@ import 'Donation/donation.dart';
 import 'PrayTime/praytime.dart';
 import 'ErrorWidgets/LocationError.dart';
 import 'Services/ads_service.dart';
+import 'Menu/menu.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -153,57 +154,57 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(
-          widget.title,
-          style: const TextStyle(fontFamily: 'Poppins'),
-        ),
-      ),
-      body: IndexedStack(
-          index: _tabIndex,
-          children: _locationPermissionGranted
-              ? const <Widget>[
-                  Compass(),
-                  Praytime(),
-                  Donation(),
-                ]
-              : <Widget>[
-                  LocationErrorWidget(
-                    error: "Mohon nyalakan izin akses lokasi",
-                    callback: _checkAndRequestPermission,
-                  ),
-                  LocationErrorWidget(
-                    error: "Mohon nyalakan izin akses lokasi",
-                    callback: _checkAndRequestPermission,
-                  ),
-                  const Donation()
-                ]),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.only(top: 8, bottom: 8),
-        color: Theme.of(context).colorScheme.inversePrimary,
-        child: BottomNavigationBar(
-          selectedItemColor: Theme.of(context).canvasColor,
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(FlutterIslamicIcons.solidKaaba),
-                label: 'Kiblat',
-                key: Key('Qibla')),
-            BottomNavigationBarItem(
-                icon: Icon(FlutterIslamicIcons.solidPrayingPerson),
-                label: 'Sholat',
-                key: Key('Praytime')),
-            BottomNavigationBarItem(
-                icon: Icon(FlutterIslamicIcons.solidZakat),
-                label: 'Donasi',
-                key: Key('Donation'))
-          ],
+        appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          onTap: (tabIndex) => {_tabChanged(tabIndex)},
-          currentIndex: _tabIndex,
-          elevation: 0,
+          title: Text(
+            widget.title,
+            style: const TextStyle(fontFamily: 'Poppins'),
+          ),
         ),
-      ),
-    );
+        // body: IndexedStack(
+        //     index: _tabIndex,
+        //     children: _locationPermissionGranted
+        //         ? const <Widget>[
+        //             Compass(),
+        //             Praytime(),
+        //             Donation(),
+        //           ]
+        //         : <Widget>[
+        //             LocationErrorWidget(
+        //               error: "Mohon nyalakan izin akses lokasi",
+        //               callback: _checkAndRequestPermission,
+        //             ),
+        //             LocationErrorWidget(
+        //               error: "Mohon nyalakan izin akses lokasi",
+        //               callback: _checkAndRequestPermission,
+        //             ),
+        //             const Donation()
+        //           ]),
+        // bottomNavigationBar: Container(
+        //   padding: const EdgeInsets.only(top: 8, bottom: 8),
+        //   color: Theme.of(context).colorScheme.inversePrimary,
+        //   child: BottomNavigationBar(
+        //     selectedItemColor: Theme.of(context).canvasColor,
+        //     items: const [
+        //       BottomNavigationBarItem(
+        //           icon: Icon(FlutterIslamicIcons.solidKaaba),
+        //           label: 'Kiblat',
+        //           key: Key('Qibla')),
+        //       BottomNavigationBarItem(
+        //           icon: Icon(FlutterIslamicIcons.solidPrayingPerson),
+        //           label: 'Sholat',
+        //           key: Key('Praytime')),
+        //       BottomNavigationBarItem(
+        //           icon: Icon(FlutterIslamicIcons.solidZakat),
+        //           label: 'Donasi',
+        //           key: Key('Donation'))
+        //     ],
+        //     backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        //     onTap: (tabIndex) => {_tabChanged(tabIndex)},
+        //     currentIndex: _tabIndex,
+        //     elevation: 0,
+        //   ),
+        // ),
+        body: const Menu());
   }
 }

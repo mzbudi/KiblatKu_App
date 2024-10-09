@@ -73,142 +73,147 @@ class _PraytimeState extends State<Praytime> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<PrayerTimes>(
-      future: _prayerTimesFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData) {
-          return const Center(child: Text('No data available'));
-        }
+    return Scaffold(
+      body: FutureBuilder<PrayerTimes>(
+        future: _prayerTimesFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData) {
+            return const Center(child: Text('No data available'));
+          }
 
-        final prayerTimes = snapshot.data!;
-        final displayTimeZone = _timeZone ?? 'Loading...';
-        final displayLocationName = _locationName ?? 'Loading...';
+          final prayerTimes = snapshot.data!;
+          final displayTimeZone = _timeZone ?? 'Loading...';
+          final displayLocationName = _locationName ?? 'Loading...';
 
-        return Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                child: const Center(
-                  child: Text(
-                    'Jadwal Salat Hari Ini',
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Poppins'),
-                    textAlign: TextAlign.center,
+          return Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: const Center(
+                    child: Text(
+                      'Jadwal Salat Hari Ini',
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins'),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
-              ),
-              Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Zona Waktu : $displayTimeZone',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Poppins'),
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Zona Waktu : $displayTimeZone',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins'),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Lokasi : $displayLocationName',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Poppins'),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Lokasi : $displayLocationName',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins'),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ]),
+                            ],
+                          ),
+                        ]),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              Expanded(
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                  childAspectRatio: 1.5,
-                  children: [
-                    _buildPrayerTimeItem(
-                        'Subuh',
-                        prayerTimes.fajr,
-                        const Icon(
-                          FlutterIslamicIcons.solidLantern,
-                          color: Color.fromARGB(255, 249, 210, 119),
-                        )),
-                    _buildPrayerTimeItem(
-                        'Terbit',
-                        prayerTimes.sunrise,
-                        const Icon(
-                          Icons.wb_sunny,
-                          color: Color.fromARGB(255, 252, 236, 93),
-                        )),
-                    _buildPrayerTimeItem(
-                        'Dzuhur',
-                        prayerTimes.dhuhr,
-                        const Icon(
-                          Icons.sunny,
-                          color: Color.fromARGB(255, 251, 201, 2),
-                        )),
-                    _buildPrayerTimeItem('Ashar', prayerTimes.asr,
-                        const Icon(Icons.sunny_snowing, color: Colors.orange)),
-                    _buildPrayerTimeItem(
-                        'Maghrib',
-                        prayerTimes.maghrib,
-                        const Icon(
-                          Icons.brightness_6,
-                          color: Color.fromARGB(255, 224, 137, 5),
-                        )),
-                    _buildPrayerTimeItem(
-                        'Isha',
-                        prayerTimes.isha,
-                        const Icon(Icons.mode_night,
-                            color: Color.fromARGB(255, 243, 236, 181))),
-                  ],
+                const SizedBox(height: 16.0),
+                Expanded(
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                    childAspectRatio: 1.5,
+                    children: [
+                      _buildPrayerTimeItem(
+                          'Subuh',
+                          prayerTimes.fajr,
+                          const Icon(
+                            FlutterIslamicIcons.solidLantern,
+                            color: Color.fromARGB(255, 249, 210, 119),
+                          )),
+                      _buildPrayerTimeItem(
+                          'Terbit',
+                          prayerTimes.sunrise,
+                          const Icon(
+                            Icons.wb_sunny,
+                            color: Color.fromARGB(255, 252, 236, 93),
+                          )),
+                      _buildPrayerTimeItem(
+                          'Dzuhur',
+                          prayerTimes.dhuhr,
+                          const Icon(
+                            Icons.sunny,
+                            color: Color.fromARGB(255, 251, 201, 2),
+                          )),
+                      _buildPrayerTimeItem(
+                          'Ashar',
+                          prayerTimes.asr,
+                          const Icon(Icons.sunny_snowing,
+                              color: Colors.orange)),
+                      _buildPrayerTimeItem(
+                          'Maghrib',
+                          prayerTimes.maghrib,
+                          const Icon(
+                            Icons.brightness_6,
+                            color: Color.fromARGB(255, 224, 137, 5),
+                          )),
+                      _buildPrayerTimeItem(
+                          'Isha',
+                          prayerTimes.isha,
+                          const Icon(Icons.mode_night,
+                              color: Color.fromARGB(255, 243, 236, 181))),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                child: const Column(
-                  children: [
-                    Text(
-                      '*Penentapan Waktu Shubuh	: 20.0°. Kemiringan Matahari',
-                      style: TextStyle(fontFamily: 'Poppins'),
-                      textAlign: TextAlign.left,
-                    ),
-                    Text(
-                      '*Penetapan Waktu Isya	: 18.0°. Kemiringan Matahari',
-                      style: TextStyle(fontFamily: 'Poppins'),
-                      textAlign: TextAlign.left,
-                    ),
-                  ],
+                Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: const Column(
+                    children: [
+                      Text(
+                        '*Penentapan Waktu Shubuh	: 20.0°. Kemiringan Matahari',
+                        style: TextStyle(fontFamily: 'Poppins'),
+                        textAlign: TextAlign.left,
+                      ),
+                      Text(
+                        '*Penetapan Waktu Isya	: 18.0°. Kemiringan Matahari',
+                        style: TextStyle(fontFamily: 'Poppins'),
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
